@@ -409,6 +409,12 @@ function addRecord() {
     document.getElementById('recordModalTitle').textContent = '新增个人健康档案';
     document.getElementById('recordForm').reset();
     
+    // 设置默认时间为当前时间
+    const now = new Date();
+    const currentDateTime = now.toISOString().slice(0, 16);
+    document.getElementById('modalCreateTime').value = currentDateTime;
+    document.getElementById('modalUpdateTime').value = currentDateTime;
+    
     showModal('recordModal');
 }
 
@@ -430,7 +436,53 @@ function editRecord(id) {
     document.getElementById('modalPhone').value = record.phone;
     document.getElementById('modalUnit').value = record.unit;
     
+    // 填充时间字段（转换为datetime-local格式）
+    document.getElementById('modalCreateTime').value = formatDateTimeForInput(record.createTime);
+    document.getElementById('modalUpdateTime').value = formatDateTimeForInput(record.updateTime);
+    
     showModal('recordModal');
+}
+
+// 格式化日期时间用于datetime-local输入
+function formatDateTimeForInput(dateString) {
+    if (!dateString) return '';
+    
+    // 如果只有日期，添加默认时间
+    if (dateString.length === 10) {
+        return dateString + 'T00:00';
+    }
+    
+    // 如果已经是完整的日期时间格式，直接返回
+    if (dateString.includes('T')) {
+        return dateString;
+    }
+    
+    // 尝试解析并格式化
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return dateString + 'T00:00';
+        }
+        return date.toISOString().slice(0, 16);
+    } catch (error) {
+        return dateString + 'T00:00';
+    }
+}
+
+// 格式化日期时间用于存储
+function formatDateTimeForStorage(dateTimeString) {
+    if (!dateTimeString) return '';
+    
+    try {
+        const date = new Date(dateTimeString);
+        if (isNaN(date.getTime())) {
+            return dateTimeString;
+        }
+        // 返回 YYYY-MM-DD HH:mm:ss 格式
+        return date.toISOString().slice(0, 19).replace('T', ' ');
+    } catch (error) {
+        return dateTimeString;
+    }
 }
 
 // 保存记录
@@ -1270,6 +1322,8 @@ function validateForm() {
     const gender = document.getElementById('modalGender').value;
     const birthDate = document.getElementById('modalBirthDate').value;
     const idNumber = document.getElementById('modalIdNumber').value.trim();
+    const createTime = document.getElementById('modalCreateTime').value;
+    const updateTime = document.getElementById('modalUpdateTime').value;
     
     if (!name) {
         showNotification('请输入姓名！', 'error');
@@ -1297,6 +1351,22 @@ function validateForm() {
         return false;
     }
     
+    // 时间验证
+    if (createTime && updateTime) {
+        const createDate = new Date(createTime);
+        const updateDate = new Date(updateTime);
+        
+        if (createDate > updateDate) {
+            showNotification('创建时间不能晚于更新时间！', 'error');
+            return false;
+        }
+        
+        if (createDate > new Date()) {
+            showNotification('创建时间不能是未来时间！', 'error');
+            return false;
+        }
+    }
+    
     return true;
 }
 
@@ -1314,7 +1384,9 @@ function saveRecord() {
         currentAddress: document.getElementById('modalCurrentAddress').value.trim(),
         householdAddress: document.getElementById('modalHouseholdAddress').value.trim(),
         phone: document.getElementById('modalPhone').value.trim(),
-        unit: document.getElementById('modalUnit').value
+        unit: document.getElementById('modalUnit').value,
+        createTime: formatDateTimeForStorage(document.getElementById('modalCreateTime').value),
+        updateTime: formatDateTimeForStorage(document.getElementById('modalUpdateTime').value)
     };
     
     if (editingRecordId) {
@@ -1335,12 +1407,13 @@ function saveRecord() {
         }
         
         // 新增记录
+        const currentDateTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const newRecord = {
             id: Math.max(...mockData.map(r => r.id)) + 1,
             archiveNumber: generateArchiveNumber(),
             ...formData,
-            createTime: new Date().toISOString().split('T')[0],
-            updateTime: new Date().toISOString().split('T')[0]
+            createTime: formData.createTime || currentDateTime,
+            updateTime: formData.updateTime || currentDateTime
         };
         mockData.push(newRecord);
         totalRecords = mockData.length;
