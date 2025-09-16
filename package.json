@@ -1,0 +1,29 @@
+{
+  "name": "public-health-service-system",
+  "version": "1.0.0",
+  "description": "公共卫生服务信息系统 - 个人健康档案管理平台",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -o",
+    "build": "echo 'Static website - no build required'",
+    "deploy": "echo 'Ready for deployment'"
+  },
+  "keywords": [
+    "health",
+    "medical",
+    "management",
+    "system",
+    "档案管理",
+    "健康管理"
+  ],
+  "author": "Public Health Service Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/public-health-service-system.git"
+  },
+  "homepage": "https://your-username.github.io/public-health-service-system"
+}

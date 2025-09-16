@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公共卫生服务信息系统</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 顶部导航栏 - 完全按照图片设计 -->
+    <div class="top-header">
+        <div class="header-content">
+            <div class="system-title">公共卫生服务系统</div>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="搜索..." class="search-input">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="user-info">
+                    <span class="user-icon">👤</span>
+                    <span class="user-name">用户 abb</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- 左侧导航菜单 - 完全按照图片设计 -->
+        <div class="sidebar">
+            <div class="menu-section">
+                <div class="menu-item active expanded">
+                    <div class="menu-title" onclick="toggleMenu('healthArchives')">
+                        <span class="menu-icon">📁</span>
+                        <span class="menu-text">健康档案</span>
+                        <span class="menu-arrow">▼</span>
+                    </div>
+                    <div class="submenu show" id="healthArchives">
+                        <div class="submenu-item active" onclick="showModule('home')">个人健康档案</div>
+                        <div class="submenu-item" onclick="showModule('checkup')">健康体检</div>
+                        <div class="submenu-item" onclick="showModule('browser')">健康档案浏览器</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-title" onclick="toggleMenu('childrenCare')">
+                        <span class="menu-icon">👶</span>
+                        <span class="menu-text">儿童保健</span>
+                        <span class="menu-arrow">▶</span>
+                    </div>
+                    <div class="submenu" id="childrenCare">
+                        <div class="submenu-item" onclick="showModule('children')">儿童健康管理</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-title" onclick="toggleMenu('womenCare')">
+                        <span class="menu-icon">👩</span>
+                        <span class="menu-text">妇女保健</span>
+                        <span class="menu-arrow">▶</span>
+                    </div>
+                    <div class="submenu" id="womenCare">
+                        <div class="submenu-item" onclick="showModule('women')">妇女健康管理</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-title" onclick="toggleMenu('diseaseManagement')">
+                        <span class="menu-icon">❤️</span>
+                        <span class="menu-text">疾病管理</span>
+                        <span class="menu-arrow">▶</span>
+                    </div>
+                    <div class="submenu" id="diseaseManagement">
+                        <div class="submenu-item" onclick="showModule('disease')">疾病档案</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-title" onclick="toggleMenu('elderlyCare')">
+                        <span class="menu-icon">👴</span>
+                        <span class="menu-text">老年人保健</span>
+                        <span class="menu-arrow">▶</span>
+                    </div>
+                    <div class="submenu" id="elderlyCare">
+                        <div class="submenu-item" onclick="showModule('elderly')">老年人健康管理</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-title" onclick="toggleMenu('rehabilitationManagement')">
+                        <span class="menu-icon">♿</span>
+                        <span class="menu-text">康复管理</span>
+                        <span class="menu-arrow">▶</span>
+                    </div>
+                    <div class="submenu" id="rehabilitationManagement">
+                        <div class="submenu-item" onclick="showModule('rehabilitation')">康复档案</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区域 - 完全按照图片设计 -->
+        <div class="main-content">
+            <!-- 面包屑导航 -->
+            <div class="breadcrumb">
+                <span class="breadcrumb-item">
+                    <a href="#">主页</a>
+                </span>
+                <span class="breadcrumb-separator">></span>
+                <span class="breadcrumb-item active">个人健康档案</span>
+            </div>
+
+            <!-- 搜索筛选区域 -->
+            <div class="search-section">
+                <div class="search-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>所属单位</label>
+                            <select class="form-control">
+                                <option value="">请选择</option>
+                                <option value="unit1">社区卫生服务中心</option>
+                                <option value="unit2">乡镇卫生院</option>
+                                <option value="unit3">县级医院</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>姓名</label>
+                            <input type="text" class="form-control" placeholder="姓名">
+                        </div>
+                        <div class="form-group">
+                            <label>身份证号</label>
+                            <input type="text" class="form-control" placeholder="身份证号">
+                        </div>
+                        <div class="form-group">
+                            <label>性别</label>
+                            <select class="form-control">
+                                <option value="">请选择</option>
+                                <option value="male">男</option>
+                                <option value="female">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生日期</label>
+                            <div class="date-range">
+                                <input type="date" class="form-control" placeholder="开始时间">
+                                <span class="date-separator">-</span>
+                                <input type="date" class="form-control" placeholder="结束时间">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>更新日期</label>
+                            <div class="date-range">
+                                <input type="date" class="form-control" placeholder="开始时间">
+                                <span class="date-separator">-</span>
+                                <input type="date" class="form-control" placeholder="结束时间">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="searchRecords()">查询</button>
+                        <button class="btn btn-success" onclick="addRecord()">新增</button>
+                        <button class="btn btn-warning" onclick="batchProcess()">批量处理</button>
+                        <button class="btn btn-info" onclick="exportData()">导出数据</button>
+                        <button class="btn btn-secondary" onclick="showImportModal()">导入数据</button>
+                        <button class="btn btn-outline-primary" onclick="showStatistics()">数据统计</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据表格区域 -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h3>个人健康档案信息</h3>
+                    <div class="table-controls">
+                        <span>显示</span>
+                        <select class="page-size-select" onchange="changePageSize(this.value)">
+                            <option value="10">10 条结果</option>
+                            <option value="20">20 条结果</option>
+                            <option value="50">50 条结果</option>
+                            <option value="100">100 条结果</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="select-all" onchange="toggleAllCheckboxes(this)"></th>
+                                <th>健康档案号</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>出生日期</th>
+                                <th>现住地址</th>
+                                <th>户口地址</th>
+                                <th>联系电话</th>
+                                <th>身份证号</th>
+                                <th>创建时间</th>
+                                <th>更新时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsTableBody">
+                            <!-- 数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="pagination-container">
+                    <div class="pagination">
+                        <button class="page-btn" onclick="changePage(1)">上页</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <button class="page-btn" onclick="changePage(2)">下页</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增/编辑模态框 -->
+    <div class="modal" id="recordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="recordModalTitle">新增个人健康档案</h3>
+                <button class="close-btn" onclick="hideModal('recordModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="recordForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>姓名 *</label>
+                            <input type="text" class="form-control" id="modalName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>性别 *</label>
+                            <select class="form-control" id="modalGender" required>
+                                <option value="">请选择</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生日期 *</label>
+                            <input type="date" class="form-control" id="modalBirthDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>身份证号 *</label>
+                            <input type="text" class="form-control" id="modalIdNumber" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>现住地址</label>
+                            <input type="text" class="form-control" id="modalCurrentAddress">
+                        </div>
+                        <div class="form-group">
+                            <label>户口地址</label>
+                            <input type="text" class="form-control" id="modalHouseholdAddress">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>联系电话</label>
+                            <input type="tel" class="form-control" id="modalPhone">
+                        </div>
+                        <div class="form-group">
+                            <label>所属单位</label>
+                            <select class="form-control" id="modalUnit">
+                                <option value="">请选择</option>
+                                <option value="社区卫生服务中心">社区卫生服务中心</option>
+                                <option value="乡镇卫生院">乡镇卫生院</option>
+                                <option value="县级医院">县级医院</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('recordModal')">取消</button>
+                <button class="btn btn-primary" onclick="saveRecord()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导入数据模态框 -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>导入数据</h3>
+                <button class="close-btn" onclick="hideModal('importModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-section">
+                    <h4>选择导入方式</h4>
+                    <div class="import-options">
+                        <label class="import-option">
+                            <input type="radio" name="importType" value="csv" checked>
+                            <span>CSV文件导入</span>
+                        </label>
+                        <label class="import-option">
+                            <input type="radio" name="importType" value="excel">
+                            <span>Excel文件导入</span>
+                        </label>
+                    </div>
+                    
+                    <div class="file-upload">
+                        <input type="file" id="importFile" accept=".csv,.xlsx,.xls" onchange="handleFileSelect(this)">
+                        <div class="file-info" id="fileInfo"></div>
+                    </div>
+                    
+                    <div class="import-tips">
+                        <h5>导入说明：</h5>
+                        <ul>
+                            <li>CSV文件请使用UTF-8编码</li>
+                            <li>第一行必须是标题行</li>
+                            <li>必填字段：姓名、性别、出生日期、身份证号</li>
+                            <li>身份证号不能重复</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('importModal')">取消</button>
+                <button class="btn btn-primary" onclick="importData()" id="importBtn" disabled>开始导入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据统计模态框 -->
+    <div class="modal" id="statisticsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>数据统计</h3>
+                <button class="close-btn" onclick="hideModal('statisticsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="statistics-content">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalRecords">0</div>
+                            <div class="stat-label">总记录数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="maleCount">0</div>
+                            <div class="stat-label">男性</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="femaleCount">0</div>
+                            <div class="stat-label">女性</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-section">
+                        <h4>按单位统计</h4>
+                        <div class="unit-stats" id="unitStats"></div>
+                    </div>
+                    
+                    <div class="stat-section">
+                        <h4>按年龄段统计</h4>
+                        <div class="age-stats" id="ageStats"></div>
+                    </div>
+                    
+                    <div class="stat-section">
+                        <h4>最近更新</h4>
+                        <div class="recent-updates" id="recentUpdates"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('statisticsModal')">关闭</button>
+                <button class="btn btn-primary" onclick="exportStatistics()">导出统计</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
